@@ -1,4 +1,4 @@
-name: Maven Deploy to GitHub Packages
+name: Deploy to Maven GitHub Packages
 
 on:
   push:
