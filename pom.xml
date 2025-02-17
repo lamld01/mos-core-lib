@@ -13,7 +13,7 @@
 
     <groupId>com.lamld</groupId>
     <artifactId>mos-core-lib</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <name>mos-core-lib</name>
     <description>mos-core-lib</description>
 
@@ -24,6 +24,20 @@
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <spring.boot.maven.plugin.version>3.4.2</spring.boot.maven.plugin.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Cloud Dependencies BOM -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2024.0.0</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 
     <dependencies>
         <!-- Spring Boot Core -->
@@ -56,6 +70,12 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <!-- Spring Cloud OpenFeign -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
         <!-- Lombok -->
@@ -117,18 +137,4 @@
             <url>https://maven.pkg.github.com/lamld01/mos-core-lib</url>
         </repository>
     </distributionManagement>
-
-    <repositories>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/lamld01/mos-core-lib</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/lamld01/mos-core-lib</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>
