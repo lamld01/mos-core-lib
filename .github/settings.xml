@@ -2,8 +2,8 @@
     <servers>
         <server>
             <id>github</id>
-            <username>${env.GITHUB_ACTOR}</username>
-            <password>${env.GITHUB_TOKEN}</password>
+            <username>lamld01</username>
+            <password>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</password>
         </server>
     </servers>
 </settings>
