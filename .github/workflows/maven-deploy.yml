@@ -15,7 +15,8 @@ jobs:
           echo "GITHUB_ACTOR: $GITHUB_ACTOR"
           echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY"
           echo "GITHUB_SHA: $GITHUB_SHA"
-          echo "GITHUB_TOKEN is available: ${{ secrets.GITHUB_TOKEN }}"
+          echo "GITHUB_TOKEN is available: $GITHUB_TOKEN"
+          echo "TOKEN is available: $TOKEN"
       - name: Checkout code
         uses: actions/checkout@v2
 
