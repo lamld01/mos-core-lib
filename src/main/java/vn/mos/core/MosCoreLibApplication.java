@@ -1,4 +1,4 @@
-package com.lamld.moscorelib;
+package vn.mos.core;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

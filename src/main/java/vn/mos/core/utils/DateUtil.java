@@ -1,4 +1,4 @@
-package com.lamld.moscorelib.utils;
+package vn.mos.core.utils;
 
 import lombok.experimental.UtilityClass;
 

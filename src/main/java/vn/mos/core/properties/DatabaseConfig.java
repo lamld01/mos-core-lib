@@ -1,4 +1,4 @@
-package com.lamld.moscorelib.properties;
+package vn.mos.core.properties;
 
 import lombok.Getter;
 import lombok.Setter;
