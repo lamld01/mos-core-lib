@@ -132,5 +132,11 @@
         </pluginRepository>
     </pluginRepositories>
 
-
+    <servers>
+        <server>
+            <id>github</id>
+            <username>GITHUB_ACTOR</username>
+            <password>${env.GITHUB_TOKEN}</password>
+        </server>
+    </servers>
 </project>

@@ -38,7 +38,6 @@ jobs:
         run: mvn -v
 
       - name: Deploy to GitHub Packages
-        run: mvn deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
+        run: mvn deploy --settings .github/maven-settings.xml
