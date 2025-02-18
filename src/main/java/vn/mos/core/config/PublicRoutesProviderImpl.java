@@ -11,7 +11,8 @@ public class PublicRoutesProviderImpl implements PublicRoutesProvider {
     @Override
     public List<String> getPublicRoutes() {
         return List.of(
-            "/**/public/**"
+            "/**/public/**",
+            "/public/**"
         );
     }
 }

@@ -54,6 +54,7 @@ public class JwtSecurityConfig {
                 .requestMatchers(publicRoutes.toArray(new String[0])).permitAll()
                 .anyRequest().authenticated()
             )
+            .httpBasic(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(securityFilter(), UsernamePasswordAuthenticationFilter.class);
 
