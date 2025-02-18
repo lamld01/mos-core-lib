@@ -15,3 +15,7 @@ feign:
       default:
         connect-timeout: 3000
         read-timeout: 3000
+
+jwt:
+  secret: ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz
+  expiration: 3600000
