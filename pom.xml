@@ -13,7 +13,7 @@
 
     <groupId>vn.mos</groupId>
     <artifactId>core-lib</artifactId>
-    <version>0.0.19</version>
+    <version>0.0.20</version>
     <name>core-lib</name>
     <description>core-lib</description>
 
@@ -82,7 +82,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
