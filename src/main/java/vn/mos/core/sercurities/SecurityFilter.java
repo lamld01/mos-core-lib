@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import vn.mos.core.filter.TraceIdFilter;
 import vn.mos.core.utils.JwtUtil;
 
 import java.io.IOException;
@@ -25,6 +26,9 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+
+        String traceId = TraceIdFilter.getTraceId();
+        request.setAttribute(TraceIdFilter.TRACE_ID, traceId);
 
         // Lấy token từ header Authorization
         String authHeader = request.getHeader("Authorization");

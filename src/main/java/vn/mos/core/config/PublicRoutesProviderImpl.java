@@ -11,8 +11,8 @@ public class PublicRoutesProviderImpl implements PublicRoutesProvider {
     @Override
     public List<String> getPublicRoutes() {
         return List.of(
-            "/**/public/**",
-            "/public/**"
+            "/v1/public/**",
+            "/favicon.ico"
         );
     }
 }

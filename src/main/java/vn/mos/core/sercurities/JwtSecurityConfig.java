@@ -1,6 +1,7 @@
 package vn.mos.core.sercurities;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,10 +21,13 @@ import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
+@Log4j2
 public class JwtSecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final PublicRoutesProvider publicRoutesProvider;
+    private final JwtAuthEntryPoint jwtAuthEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public SecurityFilter securityFilter() {
@@ -48,11 +52,15 @@ public class JwtSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         List<String> publicRoutes = publicRoutesProvider.getPublicRoutes();
-
+      log.info("\uD83D\uDCCC Public Routes: {}", publicRoutes);
         http.csrf(AbstractHttpConfigurer::disable) // ✅ Cập nhật cách gọi phương thức trong Spring Security 6
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(publicRoutes.toArray(new String[0])).permitAll()
                 .anyRequest().authenticated()
+            )
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(jwtAuthEntryPoint) // ✅ Xử lý lỗi 401
+                .accessDeniedHandler(jwtAccessDeniedHandler) // ✅ Xử lý lỗi 403
             )
             .httpBasic(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

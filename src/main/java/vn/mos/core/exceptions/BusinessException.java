@@ -1,0 +1,23 @@
+package vn.mos.core.exceptions;
+
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import vn.mos.core.base.type.BusinessErrorCode;
+
+@Getter
+public class BusinessException extends RuntimeException {
+    private final String errorCode;
+    private final HttpStatus status;
+
+    public BusinessException(String errorCode, String message, HttpStatus status) {
+        super(message);
+        this.errorCode = errorCode;
+        this.status = status;
+    }
+
+    public BusinessException(BusinessErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode.getCode();
+        this.status = errorCode.getStatus();
+    }
+}
