@@ -1,7 +1,6 @@
-package vn.mos.core.config;
+package vn.mos.core.sercurities.properties;
 
 import org.springframework.stereotype.Component;
-import vn.mos.core.properties.PublicRoutesProvider;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ public class PublicRoutesProviderImpl implements PublicRoutesProvider {
     public List<String> getPublicRoutes() {
         return List.of(
             "/v1/public/**",
-            "/favicon.ico"
+            "/swagger-ui/**"
         );
     }
 }

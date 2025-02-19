@@ -2,16 +2,23 @@ package vn.mos.core.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+
+import java.util.Collections;
+import java.util.List;
 
 @Log4j2
 public class JsonUtils {
 
     private static final ObjectMapper objectMapper = new ObjectMapper()
-            .setSerializationInclusion(JsonInclude.Include.NON_NULL) // ✅ Không serialize giá trị null
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // ✅ Không lỗi khi JSON có key thừa
+        .setSerializationInclusion(JsonInclude.Include.NON_NULL) // ✅ Không serialize giá trị null
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // ✅ Không lỗi khi JSON có key thừa
 
     /**
      * 📝 Convert Object → JSON String
@@ -34,6 +41,35 @@ public class JsonUtils {
         } catch (Exception e) {
             log.error("❌ Error converting JSON to object: {}", json, e);
             return null;
+        }
+    }
+
+    /**
+     * 📜 Convert JSON String → List<T>
+     */
+    public static <T> List<T> fromJsonToList(String json, Class<T> clazz) {
+        try {
+            return objectMapper.readValue(json, objectMapper.getTypeFactory().constructCollectionType(List.class, clazz));
+        } catch (Exception e) {
+            log.error("❌ Error converting JSON to List: {}", json, e);
+            return Collections.emptyList();
+        }
+    }
+
+    /**
+     * 📑 Convert JSON String → Page<T>
+     */
+    public static <T> Page<T> fromJsonToPage(String json, Class<T> clazz) {
+        try {
+            // Sử dụng TypeReference để đọc danh sách data
+            TypeReference<PageImpl<T>> typeRef = new TypeReference<>() {};
+            PageImpl<T> pageData = objectMapper.readValue(json, typeRef);
+
+            // Tạo Page mới với PageRequest để đảm bảo tính toàn vẹn
+            return new PageImpl<>(pageData.getContent(), PageRequest.of(pageData.getNumber(), pageData.getSize()), pageData.getTotalElements());
+        } catch (Exception e) {
+            log.error("❌ Error converting JSON to Page: {}", json, e);
+            return Page.empty();
         }
     }
 }

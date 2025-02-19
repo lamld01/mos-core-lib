@@ -1,4 +1,4 @@
-package vn.mos.core.properties;
+package vn.mos.core.sercurities.properties;
 
 import java.util.List;
 
