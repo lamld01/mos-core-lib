@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.MDC;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import vn.mos.core.filter.TraceIdFilter;
+import vn.mos.core.sercurities.data.TokenUserInfo;
 import vn.mos.core.utils.JwtUtil;
 
 import java.io.IOException;
@@ -25,9 +27,10 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
 
         String traceId = TraceIdFilter.getTraceId();
+        MDC.put(TraceIdFilter.TRACE_ID, traceId);
         request.setAttribute(TraceIdFilter.TRACE_ID, traceId);
 
         // Lấy token từ header Authorization
@@ -39,21 +42,23 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         // Lấy JWT từ header
         String token = authHeader.substring(7);
-        String username = jwtUtil.extractUsername(token);
+        TokenUserInfo userInfo = jwtUtil.extractUserInfo(token); // ✅ Lấy full user info từ token
 
         // Kiểm tra token hợp lệ và chưa có authentication trong SecurityContext
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (userInfo != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (jwtUtil.validateToken(token)) {
-                UserDetails userDetails = User.withUsername(username)
-                        .password("")
-                        .roles("USER")
-                        .build();
+
+                // ✅ Set UserDetails từ thông tin trong TokenUserInfo
+                UserDetails userDetails = User.withUsername(userInfo.getUsername())
+                    .password("") // Không cần mật khẩu
+                    .roles(userInfo.getUserRole().name()) // Gán role từ user info
+                    .build();
 
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                // Set authentication vào SecurityContext
+                // ✅ Set authentication vào SecurityContext
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
