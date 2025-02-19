@@ -28,6 +28,11 @@ springdoc:
     name: "MIT"
     url: "https://opensource.org/licenses/MIT"
 
+security:
+  public-routes:
+    - "/v1/public/**"
+    - "/swagger-ui/**"
+    - "/v3/api-docs/**"
 
 logging:
   level:
