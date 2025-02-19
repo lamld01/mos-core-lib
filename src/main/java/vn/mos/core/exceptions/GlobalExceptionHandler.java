@@ -1,14 +1,21 @@
 package vn.mos.core.exceptions;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import vn.mos.core.base.BaseResponse;
+import vn.mos.core.base.type.BusinessErrorCode;
 import vn.mos.core.filter.TraceIdFilter;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 @Log4j2
@@ -35,6 +42,22 @@ public class GlobalExceptionHandler {
         .body(BaseResponse.error(traceId, path, 404, "The requested resource was not found"));
   }
 
+  @ExceptionHandler(FeignClientException.class)
+  public ResponseEntity<BaseResponse<Void>> handleFeignClientException(FeignClientException e) {
+    String traceId = TraceIdFilter.getTraceId();
+    String path = TraceIdFilter.getPath();
+
+    // 🛑 Log chi tiết lỗi từ Feign Client
+    log.error("🚨 FeignClientException: Status [{}], Message: {}, Response Body: {}",
+        e.getStatus().value(), e.getMessage(), e.getResponseBody());
+
+    // 📝 Format lại message để trả về client
+    String formattedMessage = String.format("Feign Error: %s | Response: %s",
+        e.getMessage(), e.getResponseBody());
+
+    return ResponseEntity.status(e.getStatus())
+        .body(BaseResponse.error(traceId, path, BusinessErrorCode.INTERNAL_SERVER_ERROR.getStatus().value(), formattedMessage));
+  }
   @ExceptionHandler(Exception.class)
   public ResponseEntity<BaseResponse<Void>> handleGeneralError(Exception ex) {
     String traceId = TraceIdFilter.getTraceId();
@@ -43,6 +66,44 @@ public class GlobalExceptionHandler {
     log.error("❌ Error at {}: {}", path, ex.getMessage(), ex);
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(BaseResponse.error(traceId, path, 500, "Internal Server Error"));
+  }
+
+  /**
+   * ❌ Xử lý lỗi validation từ @RequestBody (DTO validation)
+   */
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<BaseResponse<Void>> handleValidationException(MethodArgumentNotValidException ex) {
+    String traceId = TraceIdFilter.getTraceId();
+    String path = TraceIdFilter.getPath();
+
+    // 🔍 Lấy danh sách lỗi từ validation
+    List<String> errors = ex.getBindingResult().getFieldErrors().stream()
+        .map(FieldError::getDefaultMessage)
+        .collect(Collectors.toList());
+
+    log.warn("⚠️ Validation Error at {}: {}", path, errors);
+
+    return ResponseEntity.badRequest()
+        .body(BaseResponse.error(traceId, path, HttpStatus.BAD_REQUEST.value(), String.join(", ", errors)));
+  }
+
+  /**
+   * ❌ Xử lý lỗi validation từ @RequestParam, @PathVariable (ví dụ: @Min, @Max)
+   */
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<BaseResponse<Void>> handleConstraintViolationException(ConstraintViolationException ex) {
+    String traceId = TraceIdFilter.getTraceId();
+    String path = TraceIdFilter.getPath();
+
+    // 🔍 Lấy danh sách lỗi từ validation
+    List<String> errors = ex.getConstraintViolations().stream()
+        .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
+        .collect(Collectors.toList());
+
+    log.warn("⚠️ Constraint Violation at {}: {}", path, errors);
+
+    return ResponseEntity.badRequest()
+        .body(BaseResponse.error(traceId, path, HttpStatus.BAD_REQUEST.value(), String.join(", ", errors)));
   }
 
 }
