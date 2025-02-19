@@ -12,7 +12,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import vn.mos.core.base.BaseResponse;
 import vn.mos.core.base.type.BusinessErrorCode;
-import vn.mos.core.filter.TraceIdFilter;
+import vn.mos.core.filter.RequestFilter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,8 +23,8 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(BusinessException.class)
   public ResponseEntity<BaseResponse<Void>> handleBusinessException(BusinessException ex) {
-    String traceId = TraceIdFilter.getTraceId();
-    String path = TraceIdFilter.getPath();
+    String traceId = RequestFilter.getTraceId();
+    String path = RequestFilter.getPath();
 
     log.warn("⚠️ Business Error [{}]: {}", ex.getErrorCode(), ex.getMessage());
 
@@ -34,8 +34,8 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler({NoHandlerFoundException.class, NoResourceFoundException.class})
   public ResponseEntity<BaseResponse<Void>> handleNotFound(Exception e) {
-    String traceId = TraceIdFilter.getTraceId();
-    String path = TraceIdFilter.getPath();
+    String traceId = RequestFilter.getTraceId();
+    String path = RequestFilter.getPath();
 
     log.warn("🔍 Not Found: {}", path);
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -44,8 +44,8 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(FeignClientException.class)
   public ResponseEntity<BaseResponse<Void>> handleFeignClientException(FeignClientException e) {
-    String traceId = TraceIdFilter.getTraceId();
-    String path = TraceIdFilter.getPath();
+    String traceId = RequestFilter.getTraceId();
+    String path = RequestFilter.getPath();
 
     // 🛑 Log chi tiết lỗi từ Feign Client
     log.error("🚨 FeignClientException: Status [{}], Message: {}, Response Body: {}",
@@ -60,8 +60,8 @@ public class GlobalExceptionHandler {
   }
   @ExceptionHandler(Exception.class)
   public ResponseEntity<BaseResponse<Void>> handleGeneralError(Exception ex) {
-    String traceId = TraceIdFilter.getTraceId();
-    String path = TraceIdFilter.getPath();
+    String traceId = RequestFilter.getTraceId();
+    String path = RequestFilter.getPath();
 
     log.error("❌ Error at {}: {}", path, ex.getMessage(), ex);
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -73,8 +73,8 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<BaseResponse<Void>> handleValidationException(MethodArgumentNotValidException ex) {
-    String traceId = TraceIdFilter.getTraceId();
-    String path = TraceIdFilter.getPath();
+    String traceId = RequestFilter.getTraceId();
+    String path = RequestFilter.getPath();
 
     // 🔍 Lấy danh sách lỗi từ validation
     List<String> errors = ex.getBindingResult().getFieldErrors().stream()
@@ -92,8 +92,8 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<BaseResponse<Void>> handleConstraintViolationException(ConstraintViolationException ex) {
-    String traceId = TraceIdFilter.getTraceId();
-    String path = TraceIdFilter.getPath();
+    String traceId = RequestFilter.getTraceId();
+    String path = RequestFilter.getPath();
 
     // 🔍 Lấy danh sách lỗi từ validation
     List<String> errors = ex.getConstraintViolations().stream()

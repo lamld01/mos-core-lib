@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import vn.mos.core.filter.TraceIdFilter;
+import vn.mos.core.filter.RequestFilter;
 import vn.mos.core.sercurities.data.TokenUserInfo;
 import vn.mos.core.utils.JwtUtil;
 
@@ -29,9 +29,9 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
         throws ServletException, IOException {
 
-        String traceId = TraceIdFilter.getTraceId();
-        MDC.put(TraceIdFilter.TRACE_ID, traceId);
-        request.setAttribute(TraceIdFilter.TRACE_ID, traceId);
+        String traceId = RequestFilter.getTraceId();
+        MDC.put(RequestFilter.TRACE_ID, traceId);
+        request.setAttribute(RequestFilter.TRACE_ID, traceId);
 
         // Lấy token từ header Authorization
         String authHeader = request.getHeader("Authorization");
@@ -47,7 +47,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         // Kiểm tra token hợp lệ và chưa có authentication trong SecurityContext
         if (userInfo != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (jwtUtil.validateToken(token)) {
-
+                MDC.put(RequestFilter.USER_ID, String.valueOf(userInfo.getUserId()));
                 // ✅ Set UserDetails từ thông tin trong TokenUserInfo
                 UserDetails userDetails = User.withUsername(userInfo.getUsername())
                     .password("") // Không cần mật khẩu
