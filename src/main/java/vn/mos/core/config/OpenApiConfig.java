@@ -43,6 +43,7 @@ public class OpenApiConfig {
                     .name(properties.getLicense().getName())
                     .url(properties.getLicense().getUrl())
                 )
-            );
+            )
+            ;
     }
 }
