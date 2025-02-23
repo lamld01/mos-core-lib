@@ -8,6 +8,14 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+  data:
+    redis:
+      prefix: app
+      host: redis-14343.c1.ap-southeast-1-1.ec2.redns.redis-cloud.com
+      port: 14343
+      username: default
+      password:
+      timeout: 30000
 
 feign:
   client:

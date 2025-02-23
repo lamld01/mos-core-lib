@@ -9,6 +9,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import vn.mos.core.base.type.BusinessErrorCode;
+import vn.mos.core.exceptions.BusinessException;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +31,17 @@ public class JsonUtils {
         } catch (JsonProcessingException e) {
             log.error("❌ Error converting object to JSON: {}", object, e);
             return null;
+        }
+    }
+
+    /**
+     * 📝 Convert Object → JSON String
+     */
+    public static String toExactJson(Object object) {
+        try {
+            return objectMapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new BusinessException(BusinessErrorCode.JSON_PARSE_ERROR, e);
         }
     }
 

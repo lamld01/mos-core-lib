@@ -1,6 +1,6 @@
 package vn.mos.core.base.type;
 
-public enum CurrencyType {
+public enum CurrencyUnit {
   VND,
   USD
 }

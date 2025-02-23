@@ -21,6 +21,12 @@ public class BusinessException extends RuntimeException {
         this.status = errorCode.getStatus();
     }
 
+    public BusinessException(BusinessErrorCode errorCode, Exception exception) {
+        super(exception);
+        this.errorCode = errorCode.getCode();
+        this.status = errorCode.getStatus();
+    }
+
     public BusinessException(BusinessErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode.getCode();

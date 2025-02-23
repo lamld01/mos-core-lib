@@ -38,7 +38,7 @@ public class RequestFilter implements Filter {
         MDC.put(TRACE_ID, traceId);
         MDC.put(PATH, path);
 
-        log.info("🔗 Trace ID: {} | Path: {}", traceId, path);
+        log.debug("🔗 Trace ID: {} | Path: {}", traceId, path);
 
         try {
             chain.doFilter(request, response);
@@ -53,5 +53,9 @@ public class RequestFilter implements Filter {
 
     public static String getPath() {
         return MDC.get(PATH);
+    }
+
+    public static String getUserId() {
+        return MDC.get(USER_ID);
     }
 }

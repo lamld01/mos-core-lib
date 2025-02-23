@@ -19,6 +19,10 @@ public enum BusinessErrorCode {
     UNSUPPORTED_MEDIA_TYPE("COMMON_415", "Unsupported media type", HttpStatus.UNSUPPORTED_MEDIA_TYPE),
     INTERNAL_SERVER_ERROR("COMMON_500", "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR),
     SERVICE_UNAVAILABLE("COMMON_503", "Service unavailable", HttpStatus.SERVICE_UNAVAILABLE),
+    JSON_PARSE_ERROR("COMMON_1000", "Json parse error", HttpStatus.SERVICE_UNAVAILABLE),
+
+    // Account error code
+    ACCOUNT_NOT_FOUND("ACCOUNT_01", "Account not found", HttpStatus.BAD_REQUEST),
 
     // User error code
     USER_NOT_FOUND("USER_01", "User not found", HttpStatus.BAD_REQUEST),
@@ -26,6 +30,9 @@ public enum BusinessErrorCode {
 
     // Wallet error code
     WALLET_NOT_ENOUGH_BALANCE("WALLET_01", "Wallet not enough balance", HttpStatus.BAD_REQUEST),
+
+    // Store error code
+    STORE_NOT_FOUND("STORE_01", "Store not found", HttpStatus.BAD_REQUEST),
     ;
 
     private final String code;
