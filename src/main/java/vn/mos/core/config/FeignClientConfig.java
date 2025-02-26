@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import vn.mos.core.exceptions.FeignClientException;
+import vn.mos.core.advice.exceptions.FeignClientException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

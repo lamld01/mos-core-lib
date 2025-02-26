@@ -18,7 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import vn.mos.core.sercurities.properties.PublicRoutesProvider;
+import org.springframework.web.cors.CorsConfiguration;
+import vn.mos.core.sercurities.properties.RoutesProvider;
 import vn.mos.core.utils.JwtUtil;
 
 import java.util.List;
@@ -31,7 +32,7 @@ import java.util.List;
 public class JwtSecurityConfig {
 
   private final JwtUtil jwtUtil;
-  private final PublicRoutesProvider publicRoutesProvider;
+  private final RoutesProvider routesProvider;
   private final JwtAuthEntryPoint jwtAuthEntryPoint;
   private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
@@ -57,17 +58,29 @@ public class JwtSecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    List<String> publicRoutes = publicRoutesProvider.getPublicRoutes();
+    List<String> publicRoutes = routesProvider.getPublicRoutes();
+    List<String> allowCorsUrl = routesProvider.getCorsAllowUrl();
 
     log.info("\uD83D\uDCCC Public Routes: {}", publicRoutes);
-    http.csrf(AbstractHttpConfigurer::disable) // ✅ Cập nhật cách gọi phương thức trong Spring Security 6
+    log.info("\uD83D\uDCCC CORS Allow URLs: {}", allowCorsUrl);
+
+    http
+        .cors(cors -> cors.configurationSource(request -> {
+          CorsConfiguration config = new CorsConfiguration();
+          config.setAllowedOrigins(allowCorsUrl); //
+          config.setAllowedHeaders(List.of("*"));
+          config.setAllowedMethods(List.of("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
+          config.setAllowCredentials(true);
+          return config;
+        }))
+        .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(publicRoutes.toArray(new String[0])).permitAll()
             .anyRequest().authenticated()
         )
         .exceptionHandling(ex -> ex
-            .authenticationEntryPoint(jwtAuthEntryPoint) // ✅ Xử lý lỗi 401
-            .accessDeniedHandler(jwtAccessDeniedHandler) // ✅ Xử lý lỗi 403
+            .authenticationEntryPoint(jwtAuthEntryPoint)
+            .accessDeniedHandler(jwtAccessDeniedHandler)
         )
         .httpBasic(AbstractHttpConfigurer::disable)
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -75,6 +88,7 @@ public class JwtSecurityConfig {
 
     return http.build();
   }
+
 
   @Bean
   public PasswordEncoder passwordEncoder() {

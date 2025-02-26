@@ -13,4 +13,5 @@ import java.util.List;
 @ConfigurationProperties(prefix = "security") // ✅ Ánh xạ từ "security.public-routes"
 public class SecurityProperties {
     private List<String> publicRoutes;
+    private List<String> corsAllowUrl;
 }

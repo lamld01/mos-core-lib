@@ -1,4 +1,4 @@
-package vn.mos.core.exceptions;
+package vn.mos.core.advice.exceptions;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

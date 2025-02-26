@@ -5,12 +5,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import vn.mos.core.base.type.BusinessErrorCode;
-import vn.mos.core.exceptions.BusinessException;
+import vn.mos.core.advice.exceptions.BusinessException;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,8 +20,9 @@ import java.util.List;
 public class JsonUtils {
 
     private static final ObjectMapper objectMapper = new ObjectMapper()
-        .setSerializationInclusion(JsonInclude.Include.NON_NULL) // ✅ Không serialize giá trị null
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false); // ✅ Không lỗi khi JSON có key thừa
+        .registerModule(new JavaTimeModule())
+        .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     /**
      * 📝 Convert Object → JSON String

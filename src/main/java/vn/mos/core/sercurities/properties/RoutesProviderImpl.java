@@ -8,12 +8,17 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class PublicRoutesProviderImpl implements PublicRoutesProvider {
+public class RoutesProviderImpl implements RoutesProvider {
 
     private final SecurityProperties securityProperties;
 
     @Override
     public List<String> getPublicRoutes() {
         return securityProperties.getPublicRoutes();
+    }
+
+    @Override
+    public List<String> getCorsAllowUrl() {
+        return securityProperties.getCorsAllowUrl();
     }
 }

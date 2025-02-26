@@ -53,6 +53,8 @@ security:
     - "/v1/public/**"
     - "/swagger-ui/**"
     - "/v3/api-docs/**"
+  cors-allow-url:
+    - "http://localhost:3000"
 
 logging:
   level:

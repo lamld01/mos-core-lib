@@ -1,4 +1,4 @@
-package vn.mos.core.exceptions;
+package vn.mos.core.advice.exceptions;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
@@ -42,6 +42,17 @@ public class GlobalExceptionHandler {
     log.warn("🔍 Not Found: {}", path);
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
         .body(BaseResponse.error(traceId, path, 404, "The requested resource was not found"));
+  }
+
+  @ExceptionHandler({AccessDeniedException.class, AuthorizationDeniedException.class})
+  public ResponseEntity<BaseResponse<Void>> handleAccessDeniedException(AccessDeniedException ex) {
+    String traceId = RequestFilter.getTraceId();
+    String path = RequestFilter.getPath();
+
+    log.warn("🚫 Access Denied at {}: {}", path, ex.getMessage());
+
+    return ResponseEntity.status(HttpStatus.FORBIDDEN)
+        .body(BaseResponse.error(traceId, path, HttpStatus.FORBIDDEN.value(), "Access Denied"));
   }
 
   @ExceptionHandler(FeignClientException.class)

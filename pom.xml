@@ -30,6 +30,7 @@
         <hibernate-validator.version>8.0.2.Final</hibernate-validator.version>
         <jakarta.validation.version>3.1.1</jakarta.validation.version>
         <modelmapper.version>3.2.2</modelmapper.version>
+        <jackson-datatype.version>2.16.1</jackson-datatype.version>
     </properties>
 
     <dependencyManagement>
@@ -168,6 +169,11 @@
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>${modelmapper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson-datatype.version}</version>
         </dependency>
 
     </dependencies>
