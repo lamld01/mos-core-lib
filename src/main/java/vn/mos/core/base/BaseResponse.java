@@ -2,6 +2,7 @@ package vn.mos.core.base;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+import vn.mos.core.filter.RequestFilter;
 
 @Getter
 @Setter
@@ -21,6 +22,16 @@ public class BaseResponse<T> {
         return BaseResponse.<T>builder()
             .traceId(traceId)
             .path(path)
+            .status(200)
+            .data(data)
+            .build();
+    }
+
+    // Phương thức tiện ích để tạo response thành công
+    public static <T> BaseResponse<T> success(T data) {
+        return BaseResponse.<T>builder()
+            .traceId(RequestFilter.getTraceId())
+            .path(RequestFilter.getPath())
             .status(200)
             .data(data)
             .build();

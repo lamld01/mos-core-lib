@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import vn.mos.core.base.type.BusinessErrorCode;
-import vn.mos.core.advice.exceptions.BusinessException;
+import vn.mos.core.exceptions.BusinessException;
 
 import java.util.Collections;
 import java.util.List;

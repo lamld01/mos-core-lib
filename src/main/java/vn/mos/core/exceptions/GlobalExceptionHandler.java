@@ -1,4 +1,4 @@
-package vn.mos.core.advice.exceptions;
+package vn.mos.core.exceptions;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -117,6 +118,19 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity.badRequest()
         .body(BaseResponse.error(traceId, path, HttpStatus.BAD_REQUEST.value(), String.join(", ", errors)));
+  }
+
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  public ResponseEntity<BaseResponse<Void>> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
+    String traceId = RequestFilter.getTraceId();
+    String path = RequestFilter.getPath();
+
+    String errorMessage = String.format("Missing required parameter: %s", ex.getParameterName());
+
+    log.warn("⚠️ Missing Request Parameter at {}: {}", path, errorMessage);
+
+    return ResponseEntity.badRequest()
+        .body(BaseResponse.error(traceId, path, HttpStatus.BAD_REQUEST.value(), errorMessage));
   }
 
 }

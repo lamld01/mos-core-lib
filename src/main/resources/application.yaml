@@ -55,6 +55,7 @@ security:
     - "/v3/api-docs/**"
   cors-allow-url:
     - "http://localhost:3000"
+    - "http://localhost:8080"
 
 logging:
   level:
