@@ -23,6 +23,9 @@ public class RedisKey {
     public final String STORE_BY_ID = ":store:id:%s";
     public final String STORE_BRANCH_BY_ID = ":store_branch:%s";
 
+    // =================== CATEGORY ===================
+    public final String CATEGORY_BY_ID = ":store:id:%s";
+
     // =================== COMMON FUNCTIONS ===================
 
     /**

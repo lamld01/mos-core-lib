@@ -35,7 +35,12 @@ public enum BusinessErrorCode {
     STORE_NOT_FOUND("STORE_01", "Store not found", HttpStatus.BAD_REQUEST),
 
     // Store branch error code
-    STORE_BRANCH_NOT_FOUND("STORE_BRANCH_01", "Store branch not found", HttpStatus.BAD_REQUEST);
+    STORE_BRANCH_NOT_FOUND("STORE_BRANCH_01", "Store branch not found", HttpStatus.BAD_REQUEST),
+
+    // Category error code
+    CATEGORY_NOT_FOUND("CATEGORY_01", "Category not found", HttpStatus.BAD_REQUEST),
+
+    ;
 
     private final String code;
     private final String message;
