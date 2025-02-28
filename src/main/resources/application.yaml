@@ -56,11 +56,15 @@ security:
   cors-allow-url:
     - "http://localhost:3000"
     - "http://localhost:8080"
+    - "http://localhost:8081"
+    - "http://localhost:8082"
+    - "http://localhost:8083"
+    - "http://localhost:8084"
+    - "http://localhost:8085"
 
 logging:
   level:
-    org.springframework.security: DEBUG
-    vn.mos.core: DEBUG
+    vn.mos.core: INFO
 
 jwt:
   secret: ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz
