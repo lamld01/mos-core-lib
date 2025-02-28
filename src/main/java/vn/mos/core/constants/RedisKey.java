@@ -12,7 +12,7 @@ public class RedisKey {
 
     // =================== USER ===================
     public final String USERS = ":users:";
-    public final String USER_PAGE = ":users_page:";
+    public final String USER_PAGE = ":users:page:";
     public final String USER_BY_ID = ":user:id:%s";
     // =================== ACCOUNT ===================
     public final String ACCOUNT_BY_ID = ":account:id:%s";
@@ -24,7 +24,11 @@ public class RedisKey {
     public final String STORE_BRANCH_BY_ID = ":store_branch:%s";
 
     // =================== CATEGORY ===================
-    public final String CATEGORY_BY_ID = ":store:id:%s";
+    public final String CATEGORY_BY_ID = ":category:id:%s";
+
+    // =================== PRODUCT ===================
+    public final String PRODUCT_BY_ID = ":product:id:%s";
+    public final String PRODUCT_GROUP_BY_ID = ":product:id:%s";
 
     // =================== COMMON FUNCTIONS ===================
 

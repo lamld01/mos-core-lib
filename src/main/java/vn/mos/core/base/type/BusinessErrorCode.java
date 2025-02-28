@@ -40,6 +40,9 @@ public enum BusinessErrorCode {
     // Category error code
     CATEGORY_NOT_FOUND("CATEGORY_01", "Category not found", HttpStatus.BAD_REQUEST),
 
+    // Product error code
+    PRODUCT_NOT_FOUND("PRODUCT_01", "Product not found", HttpStatus.BAD_REQUEST),
+
     ;
 
     private final String code;

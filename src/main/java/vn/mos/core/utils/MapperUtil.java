@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,11 +38,16 @@ public class MapperUtil {
      * Converts a Page<T> to Page<V>.
      */
     public <T, V> Page<V> mapPage(Page<T> sourcePage, Class<V> targetClass) {
-        List<V> mappedList = sourcePage.getContent().stream()
-                .map(element -> modelMapper.map(element, targetClass))
-                .collect(Collectors.toList());
+        if (sourcePage == null) {
+            return new PageImpl<>(Collections.emptyList(), Pageable.unpaged(), 0);
+        } else {
+          sourcePage.getContent();
+        }
 
-        Pageable pageable = sourcePage.getPageable();
-        return new PageImpl<>(mappedList, pageable, sourcePage.getTotalElements());
+      List<V> mappedList = sourcePage.getContent().stream()
+            .map(element -> modelMapper.map(element, targetClass))
+            .collect(Collectors.toList());
+
+        return new PageImpl<>(mappedList, sourcePage.getPageable(), sourcePage.getTotalElements());
     }
 }

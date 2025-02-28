@@ -2,9 +2,9 @@ package vn.mos.core.base.type;
 
 public enum ProductCategoryType {
   FOOD,
-  ELECTION,
-  MEDICAL,
-  BEAUTY,
+  TECHNOLOGY,
+  SPORTS,
+  FASHION,
   ENTERTAINMENT,
   OTHERS
 }
